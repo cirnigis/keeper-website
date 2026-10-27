@@ -1,50 +1,63 @@
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sign In | UsedBook Marketplace</title>
+
+<title>Đăng nhập | Keeper</title>
 
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
+
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/style.css">
 </head>
+
 <body class="auth-page">
 
 	<div class="auth-card">
-		<a class="brand-name keeper-logo"
-			href="${pageContext.request.contextPath}/"
-			aria-label="Keeper Homepage"> <span class="keeper-k">K</span><span
-			class="keeper-rest">eeper</span>
+
+		<!-- Logo Keeper -->
+		<a class="keeper-brand" href="${pageContext.request.contextPath}/"
+			aria-label="Keeper - Trang chủ"> <span class="keeper-brand-icon">K</span>
+			<span class="keeper-brand-text">eeper</span>
 		</a>
 
-		<h1>Welcome back</h1>
-		<p class="text-muted">Sign in to continue to your account.</p>
+		<h1>Chào mừng bạn trở lại!</h1>
+		<p class="text-muted">Đăng nhập để tiếp tục sử dụng tài khoản của
+			bạn.</p>
 
+		<!-- Thông báo đăng nhập thất bại -->
 		<c:if test="${param.error != null}">
-			<div class="alert alert-danger" role="alert">Invalid email or
-				password, or your account is not active.</div>
+			<div class="alert alert-danger" role="alert">Email hoặc mật
+				khẩu không chính xác, hoặc tài khoản của bạn chưa được kích hoạt.</div>
 		</c:if>
 
+		<!-- Thông báo đăng xuất thành công -->
 		<c:if test="${param.logout != null}">
-			<div class="alert alert-success" role="alert">You have been
-				signed out successfully.</div>
+			<div class="alert alert-success" role="alert">Bạn đã đăng xuất
+				thành công.</div>
 		</c:if>
 
+		<!-- Thông báo thành công -->
 		<c:if test="${not empty message}">
-			<div class="alert alert-success" role="alert">${message}</div>
+			<div class="alert alert-success" role="alert">
+				<c:out value="${message}" />
+			</div>
 		</c:if>
 
+		<!-- Thông báo lỗi -->
 		<c:if test="${not empty error}">
-			<div class="alert alert-danger" role="alert">${error}</div>
+			<div class="alert alert-danger" role="alert">
+				<c:out value="${error}" />
+			</div>
 		</c:if>
 
+		<!-- Biểu mẫu đăng nhập -->
 		<form action="${pageContext.request.contextPath}/auth/login"
 			method="post">
 
@@ -52,38 +65,39 @@
 				value="${_csrf.token}">
 
 			<div class="mb-3">
-				<label for="email" class="form-label">Email address</label> <input
+				<label for="email" class="form-label">Địa chỉ email</label> <input
 					type="email" class="form-control" id="email" name="email"
-					autocomplete="username" placeholder="you@example.com" required>
+					autocomplete="username" placeholder="vidu@email.com" required>
 			</div>
 
 			<div class="mb-3">
-				<label for="password" class="form-label">Password</label> <input
+				<label for="password" class="form-label">Mật khẩu</label> <input
 					type="password" class="form-control" id="password" name="password"
-					autocomplete="current-password" placeholder="Enter your password"
+					autocomplete="current-password" placeholder="Nhập mật khẩu của bạn"
 					required>
 			</div>
 
 			<div class="forgot-password-container">
 				<a href="${pageContext.request.contextPath}/auth/forgot-password">
-					Forgot Password? </a>
+					Quên mật khẩu? </a>
 			</div>
 
-			<button type="submit" class="btn btn-primary w-100">Sign In
-			</button>
+			<button type="submit" class="btn btn-primary w-100">Đăng
+				nhập</button>
 		</form>
 
 		<p class="auth-footer">
-			Don't have an account? <a
-				href="${pageContext.request.contextPath}/auth/register"> Create
-				an account </a>
+			Bạn chưa có tài khoản? <a
+				href="${pageContext.request.contextPath}/auth/register"> Đăng ký
+				ngay </a>
 		</p>
 
-		<a class="back-home" href="${pageContext.request.contextPath}/">
-			Back to homepage </a>
+		<a class="back-home" href="${pageContext.request.contextPath}/"> <i
+			class="bi bi-arrow-left"></i> Quay lại trang chủ
+		</a>
+
 	</div>
-
-
 
 </body>
 </html>
+

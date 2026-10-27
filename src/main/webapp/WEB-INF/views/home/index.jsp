@@ -1,15 +1,14 @@
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>UsedBookMarket | Discover Your Next Book</title>
+<title>Keeper | Khám phá những cuốn sách hay</title>
 
 <link rel="icon" type="image/x-icon"
 	href="${pageContext.request.contextPath}/assets/favicon.ico">
@@ -27,19 +26,21 @@
 
 <body>
 
-	<!-- Navigation -->
+	<!-- Thanh điều hướng -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container px-4 px-lg-5">
 
-			<a class="navbar-brand fw-bold"
-				href="${pageContext.request.contextPath}/"> UsedBook<span
-				class="text-primary">Market</span>
+
+			<a class="keeper-brand" href="${pageContext.request.contextPath}/"
+				aria-label="Keeper - Trang chủ"> <span class="keeper-brand-icon">K</span>
+				<span class="keeper-brand-text">eeper</span>
 			</a>
+
 
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#mainNavbar"
 				aria-controls="mainNavbar" aria-expanded="false"
-				aria-label="Toggle navigation">
+				aria-label="Mở hoặc đóng thanh điều hướng">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -48,28 +49,28 @@
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
 					<li class="nav-item"><a class="nav-link active"
 						aria-current="page" href="${pageContext.request.contextPath}/">
-							Home </a></li>
+							Trang chủ </a></li>
 
 					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/books"> Browse Books
+						href="${pageContext.request.contextPath}/books"> Khám phá sách
 					</a></li>
 
 					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/shops"> Shops </a></li>
+						href="${pageContext.request.contextPath}/shops"> Cửa hàng </a></li>
 				</ul>
 
 				<div class="d-flex align-items-center gap-2 flex-wrap">
 
 					<a class="btn btn-outline-dark"
 						href="${pageContext.request.contextPath}/buyer/cart"> <i
-						class="bi bi-cart-fill me-1"></i> Cart
+						class="bi bi-cart-fill me-1"></i> Giỏ hàng
 					</a>
 
 					<c:choose>
 						<c:when test="${pageContext.request.userPrincipal != null}">
 							<a class="btn btn-primary"
-								href="${pageContext.request.contextPath}/buyer/profile"> My
-								Account </a>
+								href="${pageContext.request.contextPath}/buyer/profile"> Tài
+								khoản của tôi </a>
 
 							<form action="${pageContext.request.contextPath}/auth/logout"
 								method="post" class="d-inline">
@@ -78,18 +79,18 @@
 									value="${_csrf.token}">
 
 								<button class="btn btn-outline-secondary" type="submit">
-									Sign Out</button>
+									Đăng xuất</button>
 							</form>
 						</c:when>
 
 						<c:otherwise>
 							<a class="btn btn-outline-primary"
-								href="${pageContext.request.contextPath}/auth/login"> Sign
-								In </a>
+								href="${pageContext.request.contextPath}/auth/login"> Đăng
+								nhập </a>
 
 							<a class="btn btn-primary"
 								href="${pageContext.request.contextPath}/auth/register">
-								Register </a>
+								Đăng ký </a>
 						</c:otherwise>
 					</c:choose>
 
@@ -98,27 +99,28 @@
 		</div>
 	</nav>
 
-	<!-- Hero -->
+	<!-- Banner giới thiệu -->
 	<header class="bg-dark py-5">
 		<div class="container px-4 px-lg-5 my-5">
 
 			<div class="text-center text-white">
-				<h1 class="display-4 fw-bolder">Every Book Deserves Another
-					Story</h1>
+				<h1 class="display-4 fw-bolder">Mỗi cuốn sách đều xứng đáng có
+					thêm một câu chuyện</h1>
 
-				<p class="lead fw-normal text-white-50 mb-4">Discover pre-loved
-					books and give your next favorite story a new home.</p>
+				<p class="lead fw-normal text-white-50 mb-4">Khám phá những cuốn
+					sách đã qua sử dụng và tìm một câu chuyện mới để đồng hành cùng
+					bạn.</p>
 
 				<form action="${pageContext.request.contextPath}/books" method="get"
 					class="d-flex justify-content-center">
 
 					<div class="input-group home-search">
 						<input class="form-control" type="search" name="keyword"
-							placeholder="Search by book title or author..."
-							aria-label="Search books">
+							placeholder="Tìm theo tên sách hoặc tác giả..."
+							aria-label="Tìm kiếm sách">
 
 						<button class="btn btn-primary" type="submit">
-							<i class="bi bi-search me-1"></i> Search
+							<i class="bi bi-search me-1"></i> Tìm kiếm
 						</button>
 					</div>
 				</form>
@@ -127,7 +129,7 @@
 		</div>
 	</header>
 
-	<!-- Book Catalog -->
+	<!-- Danh sách sách nổi bật -->
 	<section class="py-5">
 		<div class="container px-4 px-lg-5 mt-2">
 
@@ -136,14 +138,14 @@
                     align-items-center mb-4 flex-wrap gap-3">
 
 				<div>
-					<h2 class="fw-bolder mb-1">Discover Books</h2>
-					<p class="text-muted mb-0">Find great reads from independent
-						sellers.</p>
+					<h2 class="fw-bolder mb-1">Khám phá sách</h2>
+					<p class="text-muted mb-0">Tìm những cuốn sách hay từ các cửa
+						hàng độc lập.</p>
 				</div>
 
 				<a class="btn btn-outline-dark"
-					href="${pageContext.request.contextPath}/books"> View All Books
-				</a>
+					href="${pageContext.request.contextPath}/books"> Xem tất cả
+					sách </a>
 			</div>
 
 			<c:choose>
@@ -159,21 +161,21 @@
 							<div class="col mb-5">
 								<div class="card h-100 book-card">
 
-									<!-- Book Cover -->
+									<!-- Ảnh bìa sách -->
 									<c:choose>
 										<c:when test="${not empty book.coverUrl}">
 											<img class="card-img-top"
-												src="<c:out value='${book.coverUrl}'/>" alt="Book cover">
+												src="<c:out value='${book.coverUrl}'/>" alt="Ảnh bìa sách">
 										</c:when>
 
 										<c:otherwise>
 											<img class="card-img-top"
-												src="https://dummyimage.com/450x300/e9ecef/495057.jpg&text=Book+Cover"
-												alt="Book cover placeholder">
+												src="https://dummyimage.com/450x300/e9ecef/495057.jpg&text=Bia+Sach"
+												alt="Chưa có ảnh bìa sách">
 										</c:otherwise>
 									</c:choose>
 
-									<!-- Book Information -->
+									<!-- Thông tin sách -->
 									<div class="card-body p-4">
 										<div class="text-center">
 
@@ -186,31 +188,57 @@
 													<c:when test="${not empty book.authorName}">
 														<c:out value="${book.authorName}" />
 													</c:when>
+
 													<c:otherwise>
-                                                    Unknown author
-                                                </c:otherwise>
+                                                        Chưa có thông tin tác giả
+                                                    </c:otherwise>
 												</c:choose>
 											</p>
 
-											<span class="badge text-bg-secondary"> <c:out
-													value="${book.conditionCode}" />
+											<span class="badge text-bg-secondary"> <c:choose>
+													<c:when test="${book.conditionCode == 'NEW'}">
+                                                        Mới
+                                                    </c:when>
+													<c:when test="${book.conditionCode == 'LIKE_NEW'}">
+                                                        Như mới
+                                                    </c:when>
+													<c:when test="${book.conditionCode == 'VERY_GOOD'}">
+                                                        Rất tốt
+                                                    </c:when>
+													<c:when test="${book.conditionCode == 'GOOD'}">
+                                                        Tốt
+                                                    </c:when>
+													<c:when test="${book.conditionCode == 'ACCEPTABLE'}">
+                                                        Chấp nhận được
+                                                    </c:when>
+													<c:otherwise>
+														<c:out value="${book.conditionCode}" />
+													</c:otherwise>
+												</c:choose>
 											</span>
 
 											<p class="fw-bold text-primary mt-3 mb-1">
 												<fmt:formatNumber value="${book.unitPrice}" type="number"
 													groupingUsed="true" maxFractionDigits="0" />
-												VND
+												VNĐ
 											</p>
 
 											<p class="small text-muted mb-0">
 												<i class="bi bi-shop me-1"></i>
-												<c:out value="${book.shopName}" />
+												<c:choose>
+													<c:when test="${not empty book.shopName}">
+														<c:out value="${book.shopName}" />
+													</c:when>
+													<c:otherwise>
+                                                        Chưa có thông tin cửa hàng
+                                                    </c:otherwise>
+												</c:choose>
 											</p>
 
 										</div>
 									</div>
 
-									<!-- View Details -->
+									<!-- Nút xem chi tiết -->
 									<div
 										class="card-footer p-4 pt-0
                                             border-top-0 bg-transparent">
@@ -218,7 +246,7 @@
 										<div class="text-center">
 											<a class="btn btn-outline-dark mt-auto"
 												href="${pageContext.request.contextPath}/books/${book.listingId}">
-												View Details </a>
+												Xem chi tiết </a>
 										</div>
 
 									</div>
@@ -235,14 +263,14 @@
 					<div class="empty-state text-center py-5">
 						<i class="bi bi-book display-3 text-muted"></i>
 
-						<h3 class="mt-3">No books available yet</h3>
+						<h3 class="mt-3">Chưa có sách nào</h3>
 
-						<p class="text-muted">There are currently no books available
-							for sale. Please check back later.</p>
+						<p class="text-muted">Hiện chưa có sách nào được đăng bán. Vui
+							lòng quay lại sau.</p>
 
 						<a class="btn btn-primary"
-							href="${pageContext.request.contextPath}/books"> Browse All
-							Books </a>
+							href="${pageContext.request.contextPath}/books"> Khám phá tất
+							cả sách </a>
 					</div>
 
 				</c:otherwise>
@@ -251,32 +279,35 @@
 		</div>
 	</section>
 
-	<!-- Seller Call to Action -->
+	<!-- Lời mời dành cho người bán -->
 	<section class="py-5 bg-light">
 		<div class="container px-4 px-lg-5 text-center">
 
-			<h2 class="fw-bolder">Have Books You No Longer Need?</h2>
+			<h2 class="fw-bolder">Bạn có những cuốn sách không còn sử dụng?
+			</h2>
 
-			<p class="text-muted mb-4">Open your shop and help your books
-				find their next readers.</p>
+			<p class="text-muted mb-4">Mở cửa hàng của riêng bạn và giúp
+				những cuốn sách tìm được người đọc tiếp theo.</p>
 
 			<a class="btn btn-dark"
-				href="${pageContext.request.contextPath}/auth/register"> Join as
-				a Seller </a>
+				href="${pageContext.request.contextPath}/auth/register"> Đăng ký
+				trở thành người bán </a>
 
 		</div>
 	</section>
 
-	<!-- Footer -->
+	<!-- Chân trang -->
 	<footer class="py-5 bg-dark">
 		<div class="container">
-			<p class="m-0 text-center text-white">Copyright &copy;
-				UsedBookMarket 2026</p>
+			<p class="m-0 text-center text-white">Bản quyền &copy; Keeper
+				2026</p>
 		</div>
 	</footer>
 
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+		
+	</script>
 
 	<script src="${pageContext.request.contextPath}/js/scripts.js"></script>
 

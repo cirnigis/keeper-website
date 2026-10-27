@@ -21,47 +21,34 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.authorizeHttpRequests(auth -> auth
-
-				// Allow internal forwards and error dispatches
-				.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-
-				// Allow JSP views to be rendered internally
-				.requestMatchers("/WEB-INF/views/**").permitAll()
-
-				// Public pages and authentication endpoints
-				.requestMatchers("/", "/books", "/books/**", "/shops", "/auth/**", "/css/**", "/js/**", "/images/**",
-						"/assets/**", "/webjars/**", "/favicon.ico", "/error")
+		http.authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR)
 				.permitAll()
 
-				// ADMIN access
+				.requestMatchers("/WEB-INF/views/**").permitAll()
+
+				.requestMatchers("/", "/books", "/books/**", "/shops", "/shops/**", "/auth/**", "/css/**", "/js/**",
+						"/images/**", "/assets/**", "/webjars/**", "/favicon.ico", "/error")
+				.permitAll()
+
 				.requestMatchers("/admin/**").hasRole("ADMIN")
 
-				// MANAGER and ADMIN access
 				.requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
 
-				// SELLER and ADMIN access
 				.requestMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
 
-				// SHIPPER and ADMIN access
 				.requestMatchers("/shipper/**").hasAnyRole("SHIPPER", "ADMIN")
 
-				// Authenticated marketplace users
 				.requestMatchers("/buyer/**").hasAnyRole("BUYER", "SELLER", "MANAGER", "SHIPPER", "ADMIN")
 
-				// All other endpoints require authentication
-				.anyRequest().authenticated())
+				.anyRequest().authenticated());
 
-				// Form login
-				.formLogin(form -> form.loginPage("/auth/login").loginProcessingUrl("/auth/login")
-						.usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/", true)
-						.failureUrl("/auth/login?error").permitAll())
+		http.formLogin(form -> form.loginPage("/auth/login").loginProcessingUrl("/auth/login")
+				.usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/", true)
+				.failureUrl("/auth/login?error").permitAll());
 
-				// Logout
-				.logout(logout -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/auth/login?logout")
-						.invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID").permitAll());
+		http.logout(logout -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/auth/login?logout")
+				.invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID").permitAll());
 
-		// Keep CSRF protection enabled for form submissions.
 		return http.build();
 	}
 }

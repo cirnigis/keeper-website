@@ -25,6 +25,7 @@ public class UserAddressController {
 
 	@GetMapping
 	public String listAddresses(Authentication authentication, Model model) {
+
 		Long userId = getCurrentUserId(authentication);
 
 		model.addAttribute("addresses", addressService.getAddresses(userId));
@@ -34,13 +35,25 @@ public class UserAddressController {
 	}
 
 	@PostMapping("/add")
-	public String addAddress(@ModelAttribute("newAddress") UserAddress address, Authentication authentication,
+	public String addAddress(@ModelAttribute("newAddress") UserAddress formAddress, Authentication authentication,
 			RedirectAttributes redirectAttributes) {
 
 		try {
+			vn.ubm.usedbookmarketplace.entity.UserAddress address = new vn.ubm.usedbookmarketplace.entity.UserAddress();
+
+			address.setRecipientName(formAddress.getRecipientName());
+			address.setPhone(formAddress.getPhone());
+			address.setProvince(formAddress.getProvince());
+			address.setDistrict(formAddress.getDistrict());
+			address.setWard(formAddress.getWard());
+			address.setAddressLine(formAddress.getAddressLine());
+
 			addressService.addAddress(getCurrentUserId(authentication), address);
+
 			redirectAttributes.addFlashAttribute("successMessage", "Address added successfully.");
 		} catch (IllegalArgumentException ex) {
+			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+		} catch (IllegalStateException ex) {
 			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
 		}
 
@@ -53,8 +66,9 @@ public class UserAddressController {
 
 		try {
 			addressService.setDefault(addressId, getCurrentUserId(authentication));
+
 			redirectAttributes.addFlashAttribute("successMessage", "Default address updated.");
-		} catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException | IllegalStateException ex) {
 			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
 		}
 
@@ -67,8 +81,9 @@ public class UserAddressController {
 
 		try {
 			addressService.deleteAddress(addressId, getCurrentUserId(authentication));
+
 			redirectAttributes.addFlashAttribute("successMessage", "Address removed successfully.");
-		} catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException | IllegalStateException ex) {
 			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
 		}
 
@@ -76,7 +91,7 @@ public class UserAddressController {
 	}
 
 	private Long getCurrentUserId(Authentication authentication) {
-		if (authentication == null || !authentication.isAuthenticated()) {
+		if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null) {
 			throw new IllegalStateException("You must sign in first.");
 		}
 

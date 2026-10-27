@@ -27,12 +27,12 @@ public class DashboardController {
 
 	@GetMapping("/seller/dashboard")
 	public String sellerDashboard(Model model) {
-		setDashboard(model, "Seller Dashboard", "Manage your shop, listings, and customer orders.", "SELLER",
-				List.of(card("Shop Overview", "View your shop information and status.", null, "Coming soon"),
-						card("Manage Listings", "Create listings and update prices or stock.", null, "Coming soon"),
-						card("Manage Orders", "Process orders placed by customers.", null, "Coming soon"),
-						card("Sales Reports", "Review sales and shop performance.", null, "Coming soon"),
-						card("Customer Messages", "Communicate with buyers.", null, "Coming soon")));
+		setDashboard(model, "Seller Dashboard", "Quản lý shop, sản phẩm, đơn hàng và doanh thu.", "SELLER",
+				List.of(card("Quản lý shop", "Đăng ký và cập nhật thông tin cửa hàng.", "/seller/shops", "Available"),
+						card("Quản lý sản phẩm", "Quản lý sách đang bán và tồn kho.", "/seller/shops", "Available"),
+						card("Quản lý đơn hàng", "Xử lý đơn hàng của shop.", null, "Coming soon"),
+						card("Khuyến mãi", "Tạo và quản lý chương trình khuyến mãi.", null, "Coming soon"),
+						card("Doanh thu", "Theo dõi doanh thu và hiệu quả kinh doanh.", null, "Coming soon")));
 		return "dashboard/index";
 	}
 

@@ -2,12 +2,12 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Create Account | Keeper</title>
+<title>Đăng ký tài khoản | Keeper</title>
 
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -21,32 +21,32 @@
 
 	<div class="auth-card">
 
-		<!-- Keeper Brand -->
-		<a class="brand-name keeper-logo"
-			href="${pageContext.request.contextPath}/"
-			aria-label="Keeper Homepage"> <span class="keeper-k">K</span><span
-			class="keeper-rest">eeper</span>
+		<!-- Logo Keeper -->
+		<a class="keeper-brand" href="${pageContext.request.contextPath}/"
+			aria-label="Keeper - Trang chủ"> <span class="keeper-brand-icon">K</span>
+			<span class="keeper-brand-text">eeper</span>
 		</a>
 
-		<h1>Create your account</h1>
+		<h1>Tạo tài khoản</h1>
 
-		<p class="text-muted">Join our community of book lovers.</p>
+		<p class="text-muted">Tham gia cộng đồng những người yêu sách cùng
+			Keeper.</p>
 
-		<!-- Error Message -->
+		<!-- Thông báo lỗi -->
 		<c:if test="${not empty errorMessage}">
 			<div class="alert alert-danger" role="alert">
 				<c:out value="${errorMessage}" />
 			</div>
 		</c:if>
 
-		<!-- Success Message -->
+		<!-- Thông báo thành công -->
 		<c:if test="${not empty successMessage}">
 			<div class="alert alert-success" role="alert">
 				<c:out value="${successMessage}" />
 			</div>
 		</c:if>
 
-		<!-- Registration Form -->
+		<!-- Biểu mẫu đăng ký -->
 		<form action="${pageContext.request.contextPath}/auth/register"
 			method="post">
 
@@ -54,48 +54,49 @@
 				value="${_csrf.token}">
 
 			<div class="mb-3">
-				<label for="fullName" class="form-label"> Full name </label> <input
+				<label for="fullName" class="form-label"> Họ và tên </label> <input
 					type="text" class="form-control" id="fullName" name="fullName"
 					maxlength="150"
 					value="<c:out value='${registerRequest.fullName}'/>"
-					autocomplete="name" placeholder="Enter your full name" required>
+					autocomplete="name" placeholder="Nhập họ và tên của bạn" required>
 			</div>
 
 			<div class="mb-3">
-				<label for="email" class="form-label"> Email address </label> <input
+				<label for="email" class="form-label"> Địa chỉ email </label> <input
 					type="email" class="form-control" id="email" name="email"
 					maxlength="254" value="<c:out value='${registerRequest.email}'/>"
-					autocomplete="email" placeholder="you@example.com" required>
+					autocomplete="email" placeholder="vidu@email.com" required>
 			</div>
 
 			<div class="mb-3">
-				<label for="password" class="form-label"> Password </label> <input
+				<label for="password" class="form-label"> Mật khẩu </label> <input
 					type="password" class="form-control" id="password" name="password"
 					minlength="8" autocomplete="new-password"
-					placeholder="At least 8 characters" required>
+					placeholder="Mật khẩu có ít nhất 8 ký tự" required>
 			</div>
 
 			<div class="mb-4">
-				<label for="confirmPassword" class="form-label"> Confirm
-					password </label> <input type="password" class="form-control"
+				<label for="confirmPassword" class="form-label"> Xác nhận
+					mật khẩu </label> <input type="password" class="form-control"
 					id="confirmPassword" name="confirmPassword" minlength="8"
-					autocomplete="new-password" placeholder="Re-enter your password"
+					autocomplete="new-password" placeholder="Nhập lại mật khẩu của bạn"
 					required>
 			</div>
 
-			<button type="submit" class="btn btn-primary w-100">Create
-				Account</button>
+			<button type="submit" class="btn btn-primary w-100">Đăng ký
+			</button>
 
 		</form>
 
-		<!-- Authentication Footer -->
+		<!-- Liên kết đăng nhập -->
 		<p class="auth-footer">
-			Already have an account? <a
-				href="${pageContext.request.contextPath}/auth/login"> Sign in </a>
+			Bạn đã có tài khoản? <a
+				href="${pageContext.request.contextPath}/auth/login"> Đăng nhập
+			</a>
 		</p>
 
 		<a class="back-home" href="${pageContext.request.contextPath}/">
-			Back to homepage </a>
+			Quay lại trang chủ </a>
 
 	</div>
 
