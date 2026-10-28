@@ -23,39 +23,29 @@ public class PaymentController {
 	}
 
 	@PostMapping("/mock-result")
-    public String processMockResult(
-            Principal principal,
-            @RequestParam(required = false) List<Long> orderIds,
-            @RequestParam String result,
-            Model model,
-            RedirectAttributes redirectAttributes) {
+	public String processMockResult(Principal principal, @RequestParam(required = false) List<Long> orderIds,
+			@RequestParam String result, Model model, RedirectAttributes redirectAttributes) {
 
-        if (principal == null) {
-            return "redirect:/login";
-        }
+		if (principal == null) {
+			return "redirect:/auth/login";
+		}
 
-        try {
-            paymentService.processMomoMockResult(
-                    principal.getName(),
-                    orderIds,
-                    result);
+		try {
+			paymentService.processMomoMockResult(principal.getName(), orderIds, result);
 
-            if ("SUCCESS".equalsIgnoreCase(result)) {
-                redirectAttributes.addFlashAttribute(
-                        "successMessage",
-                        "Thanh toán MoMo thành công.");
-            } else {
-                redirectAttributes.addFlashAttribute(
-                        "errorMessage",
-                        "Thanh toán MoMo thất bại. Bạn có thể thử thanh toán lại.");
-            }
+			if ("SUCCESS".equalsIgnoreCase(result)) {
+				redirectAttributes.addFlashAttribute("successMessage", "Thanh toán MoMo thành công.");
+			} else {
+				redirectAttributes.addFlashAttribute("errorMessage",
+						"Thanh toán MoMo thất bại. Bạn có thể thử thanh toán lại.");
+			}
 
-            return "redirect:/buyer/orders";
-        } catch (IllegalArgumentException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
-            model.addAttribute("orderIds", orderIds);
-            model.addAttribute("result", result);
-            return "buyer/payment-result";
-        }
-    }
+			return "redirect:/buyer/orders";
+		} catch (IllegalArgumentException ex) {
+			model.addAttribute("errorMessage", ex.getMessage());
+			model.addAttribute("orderIds", orderIds);
+			model.addAttribute("result", result);
+			return "buyer/payment-result";
+		}
+	}
 }

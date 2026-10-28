@@ -26,7 +26,7 @@ public class OrderController {
 	@GetMapping
 	public String viewOrders(Principal principal, Model model) {
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		model.addAttribute("orders", orderService.getOrdersForCurrentBuyer(principal.getName()));
@@ -38,7 +38,7 @@ public class OrderController {
 	public String viewOrderDetails(@PathVariable Long orderId, Principal principal, Model model) {
 
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		if (orderId <= 0) {

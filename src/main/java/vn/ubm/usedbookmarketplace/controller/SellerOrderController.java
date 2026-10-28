@@ -20,12 +20,15 @@ public class SellerOrderController {
 	private final SellerOrderService sellerOrderService;
 	private final SellerShopService sellerShopService;
 	private final SellerOrderRepository sellerOrderRepository;
+	private final vn.ubm.usedbookmarketplace.service.ShipmentWorkflowService shipmentWorkflowService;
 
 	public SellerOrderController(SellerOrderService sellerOrderService, SellerShopService sellerShopService,
-			SellerOrderRepository sellerOrderRepository) {
+			SellerOrderRepository sellerOrderRepository,
+			vn.ubm.usedbookmarketplace.service.ShipmentWorkflowService shipmentWorkflowService) {
 		this.sellerOrderService = sellerOrderService;
 		this.sellerShopService = sellerShopService;
 		this.sellerOrderRepository = sellerOrderRepository;
+		this.shipmentWorkflowService = shipmentWorkflowService;
 	}
 
 	@GetMapping
@@ -62,6 +65,8 @@ public class SellerOrderController {
 			model.addAttribute("order", sellerOrderService.getOrder(email, shopId, orderId));
 			model.addAttribute("items", sellerOrderService.getOrderItems(email, shopId, orderId));
 			model.addAttribute("histories", sellerOrderService.getOrderStatusHistories(email, shopId, orderId));
+			model.addAttribute("shipments", shipmentWorkflowService.shipments(email, shopId, orderId));
+			model.addAttribute("shippingProviders", shipmentWorkflowService.providers());
 
 			return "seller/order-detail";
 		} catch (IllegalArgumentException ex) {
@@ -87,6 +92,35 @@ public class SellerOrderController {
 			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
 		}
 
+		return "redirect:/seller/orders/detail?shopId=" + shopId + "&orderId=" + orderId;
+	}
+
+	@PostMapping("/shipment/create")
+	public String createShipment(Authentication authentication, @RequestParam long shopId, @RequestParam long orderId,
+			@RequestParam long providerId, @RequestParam String trackingCode, RedirectAttributes ra) {
+		String email = getEmail(authentication);
+		try {
+			Long actorId = sellerOrderRepository.findUserIdByEmail(email);
+			shipmentWorkflowService.createShipment(email, actorId, shopId, orderId, providerId, trackingCode);
+			ra.addFlashAttribute("successMessage", "Đã lưu vận đơn.");
+		} catch (IllegalArgumentException ex) {
+			ra.addFlashAttribute("errorMessage", ex.getMessage());
+		}
+		return "redirect:/seller/orders/detail?shopId=" + shopId + "&orderId=" + orderId;
+	}
+
+	@PostMapping("/shipment/status")
+	public String updateShipmentStatus(Authentication authentication, @RequestParam long shopId,
+			@RequestParam long orderId, @RequestParam long shipmentId, @RequestParam String status,
+			@RequestParam(required = false) String note, RedirectAttributes ra) {
+		String email = getEmail(authentication);
+		try {
+			Long actorId = sellerOrderRepository.findUserIdByEmail(email);
+			shipmentWorkflowService.updateShipmentStatus(email, actorId, shopId, orderId, shipmentId, status, note);
+			ra.addFlashAttribute("successMessage", "Đã cập nhật trạng thái vận chuyển.");
+		} catch (IllegalArgumentException ex) {
+			ra.addFlashAttribute("errorMessage", ex.getMessage());
+		}
 		return "redirect:/seller/orders/detail?shopId=" + shopId + "&orderId=" + orderId;
 	}
 

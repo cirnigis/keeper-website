@@ -40,7 +40,7 @@ public class CartController {
 	@GetMapping
 	public String viewCart(Principal principal, Model model) {
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		List<CartItemView> items = cartService.getItems(principal.getName());
@@ -55,7 +55,7 @@ public class CartController {
 	public String addItem(Principal principal, @RequestParam Long listingId,
 			@RequestParam(defaultValue = "1") int quantity, RedirectAttributes redirectAttributes) {
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		try {
@@ -72,7 +72,7 @@ public class CartController {
 	public String updateItem(Principal principal, @RequestParam Long cartItemId, @RequestParam int quantity,
 			RedirectAttributes redirectAttributes) {
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		try {
@@ -89,7 +89,7 @@ public class CartController {
 	public String removeItem(Principal principal, @RequestParam Long cartItemId,
 			RedirectAttributes redirectAttributes) {
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		try {
@@ -105,7 +105,7 @@ public class CartController {
 	@GetMapping("/checkout")
 	public String checkoutPage(Principal principal, Model model, RedirectAttributes redirectAttributes) {
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		AppUser user = appUserRepository.findByEmailIgnoreCase(principal.getName())
@@ -137,7 +137,7 @@ public class CartController {
 			@RequestParam(required = false) String buyerNote, Model model, RedirectAttributes redirectAttributes) {
 
 		if (principal == null) {
-			return "redirect:/login";
+			return "redirect:/auth/login";
 		}
 
 		try {

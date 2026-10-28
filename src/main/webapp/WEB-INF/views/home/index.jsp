@@ -26,16 +26,13 @@
 
 <body>
 
-	<!-- Thanh điều hướng -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container px-4 px-lg-5">
-
 
 			<a class="keeper-brand" href="${pageContext.request.contextPath}/"
 				aria-label="Keeper - Trang chủ"> <span class="keeper-brand-icon">K</span>
 				<span class="keeper-brand-text">eeper</span>
 			</a>
-
 
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -68,9 +65,38 @@
 
 					<c:choose>
 						<c:when test="${pageContext.request.userPrincipal != null}">
-							<a class="btn btn-primary"
-								href="${pageContext.request.contextPath}/buyer/profile"> Tài
-								khoản của tôi </a>
+
+							<c:choose>
+								<c:when test="${userRole == 'ROLE_ADMIN'}">
+									<a class="btn btn-primary"
+										href="${pageContext.request.contextPath}/admin/profile">
+										Tài khoản của tôi </a>
+								</c:when>
+
+								<c:when test="${userRole == 'ROLE_MANAGER'}">
+									<a class="btn btn-primary"
+										href="${pageContext.request.contextPath}/manager/profile">
+										Tài khoản của tôi </a>
+								</c:when>
+
+								<c:when test="${userRole == 'ROLE_SELLER'}">
+									<a class="btn btn-primary"
+										href="${pageContext.request.contextPath}/seller/profile">
+										Tài khoản của tôi </a>
+								</c:when>
+
+								<c:when test="${userRole == 'ROLE_SHIPPER'}">
+									<a class="btn btn-primary"
+										href="${pageContext.request.contextPath}/shipper/profile">
+										Tài khoản của tôi </a>
+								</c:when>
+
+								<c:otherwise>
+									<a class="btn btn-primary"
+										href="${pageContext.request.contextPath}/buyer/profile">
+										Tài khoản của tôi </a>
+								</c:otherwise>
+							</c:choose>
 
 							<form action="${pageContext.request.contextPath}/auth/logout"
 								method="post" class="d-inline">
@@ -81,6 +107,7 @@
 								<button class="btn btn-outline-secondary" type="submit">
 									Đăng xuất</button>
 							</form>
+
 						</c:when>
 
 						<c:otherwise>
@@ -99,11 +126,10 @@
 		</div>
 	</nav>
 
-	<!-- Banner giới thiệu -->
 	<header class="bg-dark py-5">
 		<div class="container px-4 px-lg-5 my-5">
-
 			<div class="text-center text-white">
+
 				<h1 class="display-4 fw-bolder">Mỗi cuốn sách đều xứng đáng có
 					thêm một câu chuyện</h1>
 
@@ -124,19 +150,16 @@
 						</button>
 					</div>
 				</form>
-			</div>
 
+			</div>
 		</div>
 	</header>
 
-	<!-- Danh sách sách nổi bật -->
 	<section class="py-5">
 		<div class="container px-4 px-lg-5 mt-2">
 
 			<div
-				class="d-flex justify-content-between
-                    align-items-center mb-4 flex-wrap gap-3">
-
+				class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 				<div>
 					<h2 class="fw-bolder mb-1">Khám phá sách</h2>
 					<p class="text-muted mb-0">Tìm những cuốn sách hay từ các cửa
@@ -152,16 +175,13 @@
 				<c:when test="${not empty books}">
 
 					<div
-						class="row gx-4 gx-lg-5 row-cols-1
-                            row-cols-sm-2 row-cols-md-3 row-cols-xl-4
-                            justify-content-center">
+						class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
 						<c:forEach var="book" items="${books}" end="7">
 
 							<div class="col mb-5">
 								<div class="card h-100 book-card">
 
-									<!-- Ảnh bìa sách -->
 									<c:choose>
 										<c:when test="${not empty book.coverUrl}">
 											<img class="card-img-top"
@@ -175,7 +195,6 @@
 										</c:otherwise>
 									</c:choose>
 
-									<!-- Thông tin sách -->
 									<div class="card-body p-4">
 										<div class="text-center">
 
@@ -188,7 +207,6 @@
 													<c:when test="${not empty book.authorName}">
 														<c:out value="${book.authorName}" />
 													</c:when>
-
 													<c:otherwise>
                                                         Chưa có thông tin tác giả
                                                     </c:otherwise>
@@ -238,18 +256,14 @@
 										</div>
 									</div>
 
-									<!-- Nút xem chi tiết -->
-									<div
-										class="card-footer p-4 pt-0
-                                            border-top-0 bg-transparent">
-
+									<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 										<div class="text-center">
 											<a class="btn btn-outline-dark mt-auto"
 												href="${pageContext.request.contextPath}/books/${book.listingId}">
 												Xem chi tiết </a>
 										</div>
-
 									</div>
+
 								</div>
 							</div>
 
@@ -259,7 +273,6 @@
 				</c:when>
 
 				<c:otherwise>
-
 					<div class="empty-state text-center py-5">
 						<i class="bi bi-book display-3 text-muted"></i>
 
@@ -272,14 +285,12 @@
 							href="${pageContext.request.contextPath}/books"> Khám phá tất
 							cả sách </a>
 					</div>
-
 				</c:otherwise>
 			</c:choose>
 
 		</div>
 	</section>
 
-	<!-- Lời mời dành cho người bán -->
 	<section class="py-5 bg-light">
 		<div class="container px-4 px-lg-5 text-center">
 
@@ -290,13 +301,12 @@
 				những cuốn sách tìm được người đọc tiếp theo.</p>
 
 			<a class="btn btn-dark"
-				href="${pageContext.request.contextPath}/auth/register"> Đăng ký
-				trở thành người bán </a>
+				href="${pageContext.request.contextPath}/buyer/seller-register">
+				Đăng ký trở thành người bán </a>
 
 		</div>
 	</section>
 
-	<!-- Chân trang -->
 	<footer class="py-5 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Bản quyền &copy; Keeper
@@ -305,11 +315,9 @@
 	</footer>
 
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-		
-	</script>
-
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/scripts.js"></script>
 
 </body>
 </html>
+

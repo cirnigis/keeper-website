@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
@@ -16,7 +15,7 @@
 		<div class="seller-navbar-inner">
 			<a class="keeper-brand" href="${pageContext.request.contextPath}/">
 				<span class="keeper-brand-icon">K</span> <span
-				class="keeper-brand-text">Keeper</span>
+				class="keeper-brand-text">eeper</span>
 			</a>
 
 			<div class="seller-nav-links">
@@ -36,6 +35,17 @@
 	</nav>
 
 	<main class="seller-container">
+		<c:if test="${param.status == 'shop-inactive'}">
+			<div class="seller-alert seller-alert-error" role="status">Tài
+				khoản có vai trò Người bán nhưng hiện chưa có shop nào vừa được
+				duyệt vừa đang hoạt động. Bạn có thể theo dõi trạng thái shop bên
+				dưới.</div>
+		</c:if>
+		<c:if test="${param.status == 'buyer-role-unavailable'}">
+			<div class="seller-alert seller-alert-error" role="status">Tài
+				khoản này chưa có vai trò Người mua. Bạn đang được chuyển đến khu
+				vực shop theo vai trò hiện có.</div>
+		</c:if>
 		<c:if test="${not empty successMessage}">
 			<div class="seller-alert seller-alert-success">
 				<c:out value="${successMessage}" />
@@ -63,7 +73,7 @@
 						bạn.</p>
 				</div>
 				<a class="keeper-btn-primary"
-					href="${pageContext.request.contextPath}/seller/shops/new">
+					href="${pageContext.request.contextPath}/seller/shop-register">
 					Đăng ký cửa hàng </a>
 			</div>
 
@@ -154,7 +164,7 @@
 						<h3>Bạn chưa có cửa hàng</h3>
 						<p>Đăng ký cửa hàng để bắt đầu đăng bán sách trên Keeper.</p>
 						<a class="keeper-btn-primary"
-							href="${pageContext.request.contextPath}/seller/shops/new">
+							href="${pageContext.request.contextPath}/seller/shop-register">
 							Đăng ký cửa hàng ngay </a>
 					</div>
 				</c:otherwise>

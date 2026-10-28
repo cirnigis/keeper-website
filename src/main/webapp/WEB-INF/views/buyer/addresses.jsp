@@ -82,6 +82,7 @@
 }
 </style>
 </head>
+
 <body>
 
 	<nav
@@ -123,6 +124,7 @@
 						<p class="text-muted mb-0">Quản lý địa chỉ sử dụng khi đặt mua
 							sách trên Keeper.</p>
 					</div>
+
 					<a href="${pageContext.request.contextPath}/buyer/cart"
 						class="btn btn-outline-secondary"> Quay lại giỏ hàng </a>
 				</div>
@@ -182,14 +184,14 @@
 													<c:out value="${address.province}" />
 												</div>
 
-												<c:if test="${address.default}">
-													<span class="badge text-bg-success mt-2">Địa chỉ mặc
-														định</span>
+												<c:if test="${address['default']}">
+													<span class="badge text-bg-success mt-2"> Địa chỉ
+														mặc định </span>
 												</c:if>
 											</div>
 
 											<div class="d-flex align-items-start gap-2">
-												<c:if test="${not address.default}">
+												<c:if test="${not address['default']}">
 													<form method="post"
 														action="${pageContext.request.contextPath}/buyer/addresses/${address.addressId}/default"
 														class="address-action-form">

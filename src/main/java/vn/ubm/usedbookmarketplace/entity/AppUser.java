@@ -1,3 +1,4 @@
+
 package vn.ubm.usedbookmarketplace.entity;
 
 import jakarta.persistence.*;
@@ -28,6 +29,10 @@ public class AppUser {
 
 	@Column(name = "Phone", length = 20)
 	private String phone;
+
+	// CCCD gồm 12 chữ số; tài khoản buyer có thể để null.
+	@Column(name = "CCCD", length = 12)
+	private String cccd;
 
 	@Column(name = "AvatarUrl", length = 1000)
 	private String avatarUrl;
@@ -100,6 +105,14 @@ public class AppUser {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getCccd() {
+		return cccd;
+	}
+
+	public void setCccd(String cccd) {
+		this.cccd = cccd;
 	}
 
 	public String getAvatarUrl() {

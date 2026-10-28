@@ -1,4 +1,3 @@
-```jsp
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
@@ -71,7 +70,7 @@
 										<c:forEach var="address" items="${addresses}">
 											<label class="checkout-address-option"> <input
 												type="radio" name="addressId" value="${address.addressId}"
-												<c:if test="${address.addressId eq defaultAddressId or (empty defaultAddressId and address.default)}">checked</c:if>
+												<c:if test="${address.addressId eq defaultAddressId or (empty defaultAddressId and address['default'])}">checked</c:if>
 												required> <span class="checkout-radio-mark"></span>
 												<span class="checkout-address-content"> <strong><c:out
 															value="${address.recipientName}" /></strong> <c:if
@@ -84,7 +83,7 @@
 														<span><c:out value="${address.district}" /></span>
 													</c:if> <c:if test="${not empty address.city}">
 														<span><c:out value="${address.city}" /></span>
-													</c:if> <c:if test="${address.default}">
+													</c:if> <c:if test="${address['default']}">
 														<span class="checkout-default-badge">Mặc định</span>
 													</c:if>
 											</span>
@@ -209,4 +208,4 @@
 	</main>
 </body>
 </html>
-```
+

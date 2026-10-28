@@ -19,7 +19,8 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, RoleBasedLoginSuccessHandler successHandler)
+			throws Exception {
 
 		http.authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR)
 				.permitAll()
@@ -43,7 +44,7 @@ public class SecurityConfig {
 				.anyRequest().authenticated());
 
 		http.formLogin(form -> form.loginPage("/auth/login").loginProcessingUrl("/auth/login")
-				.usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/", true)
+				.usernameParameter("email").passwordParameter("password").successHandler(successHandler)
 				.failureUrl("/auth/login?error").permitAll());
 
 		http.logout(logout -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/auth/login?logout")

@@ -255,6 +255,85 @@
 							</div>
 						</div>
 					</section>
+
+					<section class="seller-panel">
+						<h2>Vận chuyển</h2>
+						<c:if
+							test="${order.orderStatus eq 'READY_TO_SHIP' and empty shipments}">
+							<form method="post"
+								action="${pageContext.request.contextPath}/seller/orders/shipment/create"
+								class="seller-status-form">
+								<input type="hidden" name="${_csrf.parameterName}"
+									value="${_csrf.token}"> <input type="hidden"
+									name="shopId" value="${order.shopId}"><input
+									type="hidden" name="orderId" value="${order.orderId}">
+								<label for="providerId">Đơn vị vận chuyển</label><select
+									id="providerId" name="providerId" required>
+									<c:forEach var="provider" items="${shippingProviders}">
+										<option value="${provider.providerId}"><c:out
+												value="${provider.providerName}" /></option>
+									</c:forEach>
+								</select> <label for="trackingCode">Mã vận đơn</label><input
+									id="trackingCode" name="trackingCode" maxlength="100" required>
+								<button
+									class="seller-button seller-button-primary seller-button-full"
+									type="submit">Lưu vận đơn</button>
+							</form>
+						</c:if>
+						<c:choose>
+							<c:when test="${empty shipments}">
+								<p class="seller-muted">Chưa có vận đơn.</p>
+							</c:when>
+							<c:otherwise>
+								<c:forEach var="shipment" items="${shipments}">
+									<div class="seller-total-box">
+										<div>
+											<span>Đơn vị</span><strong><c:out
+													value="${shipment.providerName}" /></strong>
+										</div>
+										<div>
+											<span>Mã vận đơn</span><strong><c:out
+													value="${shipment.trackingCode}" /></strong>
+										</div>
+										<div>
+											<span>Trạng thái</span><strong><c:out
+													value="${shipment.shipmentStatus}" /></strong>
+										</div>
+									</div>
+									<c:if
+										test="${shipment.shipmentStatus eq 'WAITING_ASSIGNMENT' or shipment.shipmentStatus eq 'PICKED_UP' or shipment.shipmentStatus eq 'IN_TRANSIT'}">
+										<form method="post"
+											action="${pageContext.request.contextPath}/seller/orders/shipment/status"
+											class="seller-status-form">
+											<input type="hidden" name="${_csrf.parameterName}"
+												value="${_csrf.token}"><input type="hidden"
+												name="shopId" value="${order.shopId}"><input
+												type="hidden" name="orderId" value="${order.orderId}"><input
+												type="hidden" name="shipmentId"
+												value="${shipment.shipmentId}"> <label
+												for="shipmentStatus${shipment.shipmentId}">Cập nhật
+												trạng thái</label><select id="shipmentStatus${shipment.shipmentId}"
+												name="status" required><c:if
+													test="${shipment.shipmentStatus eq 'WAITING_ASSIGNMENT'}">
+													<option value="PICKED_UP">Đã lấy hàng</option>
+												</c:if>
+												<c:if test="${shipment.shipmentStatus eq 'PICKED_UP'}">
+													<option value="IN_TRANSIT">Đang vận chuyển</option>
+												</c:if>
+												<c:if test="${shipment.shipmentStatus eq 'IN_TRANSIT'}">
+													<option value="DELIVERED">Đã giao</option>
+												</c:if>
+												<option value="FAILED">Giao thất bại</option></select><label>Ghi
+												chú</label><input name="note" maxlength="1000">
+											<button type="submit"
+												class="seller-button seller-button-primary seller-button-full">Cập
+												nhật vận chuyển</button>
+										</form>
+									</c:if>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
+					</section>
 				</aside>
 			</div>
 		</main>

@@ -150,4 +150,102 @@ public class AuthService {
 	private String normalizeEmail(String email) {
 		return email.trim().toLowerCase(Locale.ROOT);
 	}
+
+	private static final String CHANGE_EMAIL_PURPOSE = "CHANGE_EMAIL";
+
+	@Transactional
+	public void sendEmailChangeOtp(String currentUserEmail, String newEmail) {
+		String normalizedCurrentEmail = normalizeEmail(currentUserEmail);
+		String normalizedNewEmail = normalizeEmail(newEmail);
+
+		if (normalizedNewEmail.isBlank()) {
+			throw new IllegalArgumentException("Vui lòng nhập email mới.");
+		}
+
+		if (normalizedCurrentEmail.equals(normalizedNewEmail)) {
+			throw new IllegalArgumentException("Email mới phải khác email hiện tại.");
+		}
+
+		AppUser user = userRepository.findByEmailIgnoreCase(normalizedCurrentEmail)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản đang đăng nhập."));
+
+		if (!"ACTIVE".equals(user.getAccountStatus())) {
+			throw new IllegalArgumentException("Tài khoản chưa được kích hoạt hoặc không thể đổi email.");
+		}
+
+		if (userRepository.existsByEmailIgnoreCase(normalizedNewEmail)) {
+			throw new IllegalArgumentException("Email này đã được sử dụng. Vui lòng chọn email khác.");
+		}
+
+		String otpCode = String.format(Locale.ROOT, "%06d", secureRandom.nextInt(1_000_000));
+
+		EmailOtp otp = new EmailOtp();
+		otp.setUser(user);
+		otp.setEmail(normalizedNewEmail);
+		otp.setPurpose(CHANGE_EMAIL_PURPOSE);
+		otp.setOtpHash(passwordEncoder.encode(otpCode));
+		otp.setExpiresAt(LocalDateTime.now().plusMinutes(OTP_LIFETIME_MINUTES));
+		otp.setFailedAttempts(0);
+
+		otpRepository.save(otp);
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(senderEmail);
+		message.setTo(normalizedNewEmail);
+		message.setSubject("Mã xác minh đổi email - UsedBook Marketplace");
+		message.setText("Xin chào " + user.getFullName() + ",\n\n" + "Mã OTP xác minh email mới của bạn là: " + otpCode
+				+ "\n\n" + "Mã có hiệu lực trong " + OTP_LIFETIME_MINUTES
+				+ " phút. Không chia sẻ mã này với người khác.\n\n"
+				+ "Nếu bạn không yêu cầu đổi email, hãy bỏ qua email này.\n\n" + "UsedBook Marketplace");
+
+		mailSender.send(message);
+	}
+
+	@Transactional
+	public void verifyEmailChange(String currentUserEmail, String newEmail, String otpCode) {
+		String normalizedCurrentEmail = normalizeEmail(currentUserEmail);
+		String normalizedNewEmail = normalizeEmail(newEmail);
+
+		AppUser user = userRepository.findByEmailIgnoreCase(normalizedCurrentEmail)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản đang đăng nhập."));
+
+		if (!"ACTIVE".equals(user.getAccountStatus())) {
+			throw new IllegalArgumentException("Tài khoản không thể đổi email.");
+		}
+
+		if (normalizedCurrentEmail.equals(normalizedNewEmail)) {
+			throw new IllegalArgumentException("Email mới phải khác email hiện tại.");
+		}
+
+		if (userRepository.existsByEmailIgnoreCase(normalizedNewEmail)) {
+			throw new IllegalArgumentException("Email này đã được sử dụng. Vui lòng chọn email khác.");
+		}
+
+		EmailOtp otp = otpRepository
+				.findByEmailIgnoreCaseAndPurposeOrderByCreatedAtDesc(normalizedNewEmail, CHANGE_EMAIL_PURPOSE).stream()
+				.filter(item -> item.getConsumedAt() == null)
+				.filter(item -> item.getUser().getUserId().equals(user.getUserId())).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(
+						"Không tìm thấy mã OTP đang có hiệu lực. Vui lòng gửi mã mới."));
+
+		if (otp.getFailedAttempts() >= MAX_FAILED_ATTEMPTS) {
+			throw new IllegalArgumentException("Mã OTP đã bị khóa do nhập sai quá nhiều lần. Vui lòng yêu cầu mã mới.");
+		}
+
+		if (!otp.getExpiresAt().isAfter(LocalDateTime.now())) {
+			throw new IllegalArgumentException("Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
+		}
+
+		if (!passwordEncoder.matches(otpCode, otp.getOtpHash())) {
+			otp.setFailedAttempts(otp.getFailedAttempts() + 1);
+			otpRepository.save(otp);
+			throw new IllegalArgumentException("Mã OTP không chính xác.");
+		}
+
+		otp.setConsumedAt(LocalDateTime.now());
+		otpRepository.save(otp);
+
+		user.setEmail(normalizedNewEmail);
+		userRepository.save(user);
+	}
 }

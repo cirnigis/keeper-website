@@ -90,7 +90,8 @@
 												<c:otherwise>—</c:otherwise>
 											</c:choose></td>
 										<td><c:set var="statusCode" value="${order.status}" /> <c:choose>
-												<c:when test="${statusCode eq 'PENDING'}">
+												<c:when
+													test="${statusCode eq 'PENDING' or statusCode eq 'PENDING_SELLER' or statusCode eq 'PENDING_PAYMENT'}">
 													<span class="orders-status status-pending">Chờ xác
 														nhận</span>
 												</c:when>
@@ -98,19 +99,23 @@
 													<span class="orders-status status-confirmed">Đã xác
 														nhận</span>
 												</c:when>
-												<c:when test="${statusCode eq 'PROCESSING'}">
+												<c:when
+													test="${statusCode eq 'PROCESSING' or statusCode eq 'PREPARING'}">
 													<span class="orders-status status-processing">Đang
 														xử lý</span>
 												</c:when>
-												<c:when test="${statusCode eq 'SHIPPED'}">
+												<c:when
+													test="${statusCode eq 'SHIPPED' or statusCode eq 'READY_TO_SHIP' or statusCode eq 'SHIPPING'}">
 													<span class="orders-status status-shipped">Đang giao
 														hàng</span>
 												</c:when>
-												<c:when test="${statusCode eq 'DELIVERED'}">
+												<c:when
+													test="${statusCode eq 'DELIVERED' or statusCode eq 'COMPLETED'}">
 													<span class="orders-status status-delivered">Đã giao
 														hàng</span>
 												</c:when>
-												<c:when test="${statusCode eq 'CANCELLED'}">
+												<c:when
+													test="${statusCode eq 'CANCELLED' or statusCode eq 'CANCELED'}">
 													<span class="orders-status status-cancelled">Đã hủy</span>
 												</c:when>
 												<c:when test="${statusCode eq 'RETURNED'}">

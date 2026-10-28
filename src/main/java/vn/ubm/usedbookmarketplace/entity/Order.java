@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-
 @Entity
 @Table(name = "Orders", schema = "dbo", uniqueConstraints = {
 		@UniqueConstraint(name = "UQ_Orders_OrderCode", columnNames = "OrderCode") })
@@ -99,8 +98,6 @@ public class Order {
 
 	@Column(name = "UpdatedAt", nullable = false)
 	private LocalDateTime updatedAt;
-
-
 
 	public Order() {
 	}
@@ -320,6 +317,5 @@ public class Order {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
 
 }

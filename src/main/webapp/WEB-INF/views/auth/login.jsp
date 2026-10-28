@@ -31,6 +31,17 @@
 		<p class="text-muted">Đăng nhập để tiếp tục sử dụng tài khoản của
 			bạn.</p>
 
+		<c:if test="${param.roleError == 'seller'}">
+			<div class="alert alert-warning" role="alert">Tài khoản chưa có
+				vai trò Người bán. Hãy đăng nhập bằng vai trò Người mua để đăng ký
+				mở shop.</div>
+		</c:if>
+		<c:if test="${param.roleError == 'buyer'}">
+			<div class="alert alert-warning" role="alert">Tài khoản chưa
+				được cấp vai trò Người mua. Vui lòng chọn vai trò phù hợp với tài
+				khoản.</div>
+		</c:if>
+
 		<!-- Thông báo đăng nhập thất bại -->
 		<c:if test="${param.error != null}">
 			<div class="alert alert-danger" role="alert">Email hoặc mật
@@ -63,6 +74,23 @@
 
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}">
+
+			<div class="mb-3">
+				<label class="form-label d-block">Bạn muốn tiếp tục với vai
+					trò</label>
+				<div class="d-flex gap-3 flex-wrap">
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="loginRole"
+							id="loginRoleBuyer" value="BUYER" checked> <label
+							class="form-check-label" for="loginRoleBuyer">Người mua</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="loginRole"
+							id="loginRoleSeller" value="SELLER"> <label
+							class="form-check-label" for="loginRoleSeller">Người bán</label>
+					</div>
+				</div>
+			</div>
 
 			<div class="mb-3">
 				<label for="email" class="form-label">Địa chỉ email</label> <input

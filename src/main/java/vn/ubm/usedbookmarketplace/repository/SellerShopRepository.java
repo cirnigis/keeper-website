@@ -210,4 +210,33 @@ public class SellerShopRepository {
 					"Không thể cập nhật shop. Shop không tồn tại, không thuộc tài khoản của bạn hoặc không ở trạng thái cho phép cập nhật.");
 		}
 	}
+
+	public String findCccdByUserId(long userId) {
+		String sql = """
+				SELECT CCCD
+				FROM dbo.Users
+				WHERE UserId = :userId
+				""";
+
+		try {
+			return jdbc.queryForObject(sql, new MapSqlParameterSource("userId", userId), String.class);
+		} catch (EmptyResultDataAccessException ex) {
+			throw new IllegalArgumentException("Không tìm thấy tài khoản người dùng.");
+		}
+	}
+
+	public void updateUserCccd(long userId, String cccd) {
+		String sql = """
+				UPDATE dbo.Users
+				SET CCCD = :cccd,
+				    UpdatedAt = SYSUTCDATETIME()
+				WHERE UserId = :userId
+				""";
+
+		int affected = jdbc.update(sql, new MapSqlParameterSource().addValue("userId", userId).addValue("cccd", cccd));
+
+		if (affected != 1) {
+			throw new IllegalArgumentException("Không thể cập nhật CCCD cho tài khoản người dùng.");
+		}
+	}
 }
